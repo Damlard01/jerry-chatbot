@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jerry calculation Chatbot</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="chat-container">
+    <h1>🤖 Jerry calculation Chatbot</h1>
+
+    <div id="theme-toggle">
+      <label>
+        <input type="checkbox" id="darkModeToggle" onchange="toggleDarkMode()" />
+        Dark Mode
+      </label>
+    </div>
+
+    <div id="chat-box"></div>
+
+    <div class="input-area">
+      <input type="text" id="equation" placeholder="Type a math question..." />
+      <button onclick="handleInput()">Send</button>
+    </div>
+
+    <div class="actions">
+      <button onclick="clearHistory()">Clear History</button>
+      <button onclick="exportHistory()">Download Chat</button>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
