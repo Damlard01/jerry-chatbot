@@ -1,30 +1,38 @@
+// Initialize memory (chat history array)
+let chatHistory = [];
+
 document.getElementById("chat-form").addEventListener("submit", function (e) {
   e.preventDefault();
   const input = document.getElementById("user-input");
   const userText = input.value.trim();
   if (userText === "") return;
 
+  // Add user message to history and display it
   addMessage(userText, "user-message");
+  chatHistory.push({ user: userText });
 
   // Try to calculate
   try {
     let result = solve(userText);
     addMessage("Jerry: " + result, "bot-message");
+    chatHistory.push({ bot: result });
   } catch (error) {
     addMessage("Jerry: I couldn't understand that. Try something like 2 + 2 or x^2 + 5x + 6 = 0", "bot-message");
   }
 
   input.value = "";
+  document.getElementById("chat-box").scrollTop = document.getElementById("chat-box").scrollHeight;
 });
 
+// Add message to the chat
 function addMessage(text, className) {
   const msg = document.createElement("div");
   msg.className = className;
   msg.innerText = text;
   document.getElementById("chat-box").appendChild(msg);
-  document.getElementById("chat-box").scrollTop = document.getElementById("chat-box").scrollHeight;
 }
 
+// Solve calculation or equation
 function solve(input) {
   input = input.replace(/\s+/g, '');
 
