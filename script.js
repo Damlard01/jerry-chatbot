@@ -64,11 +64,45 @@ chatForm.addEventListener("submit", function(event) {
   }
 });
 
-// Example bot reply function with basic NLP
+// Example bot reply function with NLP and calculation
 function generateBotReply(userMessage) {
   // Lowercase message for simplicity
   const message = userMessage.toLowerCase();
   
+  // Check for basic arithmetic calculation (addition, subtraction, etc.)
+  const calculationPattern = /(-?\d+(\.\d+)?)\s*([\+\-\*\/])\s*(-?\d+(\.\d+)?)/;
+  const calculationMatch = message.match(calculationPattern);
+
+  if (calculationMatch) {
+    const num1 = parseFloat(calculationMatch[1]);
+    const operator = calculationMatch[3];
+    const num2 = parseFloat(calculationMatch[4]);
+
+    let result;
+    switch (operator) {
+      case '+':
+        result = num1 + num2;
+        break;
+      case '-':
+        result = num1 - num2;
+        break;
+      case '*':
+        result = num1 * num2;
+        break;
+      case '/':
+        if (num2 !== 0) {
+          result = num1 / num2;
+        } else {
+          return "Error: Division by zero is not allowed.";
+        }
+        break;
+      default:
+        return "I couldn't understand the calculation.";
+    }
+    return `The result is: ${result}`;
+  }
+
+  // NLP responses for common queries
   if (message.includes("hello")) {
     return "Hello! How can I assist you today?";
   } else if (message.includes("how are you")) {
