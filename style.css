@@ -70,6 +70,19 @@ button {
   font-size: 16px;
 }
 
+#export-chat {
+  position: absolute;
+  top: 50px;
+  right: 10px;
+  background-color: #f39c12;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+#export-chat:hover {
+  background-color: #e67e22;
+}
+
 /* Light Mode Styles (Hidden by default) */
 body.light-mode {
   background-color: #f5f5f5; /* Light background */
