@@ -1,44 +1,156 @@
-function generateBotReply(userMessage) {
-  // Remove spaces to simplify parsing
-  const message = userMessage.replace(/\s+/g, '');
+let chatHistory = [];
 
-  // Match simple calculations like 5+3, 10-2.5, etc.
-  const calcMatch = message.match(/^(-?\d+(\.\d+)?)([\+\-\*\/])(-?\d+(\.\d+)?)$/);
+window.onload = () => {
+  loadChat();
+  applyDarkModeFromStorage();
+};
 
-  if (calcMatch) {
-    const num1 = parseFloat(calcMatch[1]);
-    const operator = calcMatch[3];
-    const num2 = parseFloat(calcMatch[4]);
-    let result;
+function handleInput() {
+  const inputField = document.getElementById("equation");
+  const input = inputField.value.trim();
+  if (!input) return;
 
-    switch (operator) {
-      case '+':
-        result = num1 + num2;
-        break;
-      case '-':
-        result = num1 - num2;
-        break;
-      case '*':
-        result = num1 * num2;
-        break;
-      case '/':
-        if (num2 === 0) return "Error: Division by zero is not allowed.";
-        result = num1 / num2;
-        break;
-      default:
-        return "Hmm... I couldn't calculate that.";
+  addMessage("user", input);
+  inputField.value = "";
+
+  const processedInput = convertToMath(input);
+  const response = getResponse(processedInput || input);
+  addMessage("bot", response);
+}
+
+function addMessage(sender, text) {
+  const chatBox = document.getElementById("chat-box");
+  const msg = document.createElement("div");
+  msg.className = `message ${sender}`;
+  msg.innerText = text;
+  chatBox.appendChild(msg);
+  chatBox.scrollTop = chatBox.scrollHeight;
+
+  chatHistory.push({ sender, text });
+  localStorage.setItem("jerry_chat", JSON.stringify(chatHistory));
+}
+
+function loadChat() {
+  const stored = localStorage.getItem("jerry_chat");
+  if (stored) {
+    chatHistory = JSON.parse(stored);
+    chatHistory.forEach(msg => addMessage(msg.sender, msg.text));
+  }
+}
+
+function clearHistory() {
+  localStorage.removeItem("jerry_chat");
+  chatHistory = [];
+  document.getElementById("chat-box").innerHTML = "";
+}
+
+function exportHistory() {
+  const text = chatHistory.map(msg => `${msg.sender === "user" ? "You" : "Jerry"}: ${msg.text}`).join("\n");
+  const blob = new Blob([text], { type: "text/plain" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "jerry_chat_history.txt";
+  a.click();
+}
+
+function getResponse(input) {
+  try {
+    if (/^[\d+\-*/().\s]+$/.test(input)) {
+      return solveArithmetic(input);
+    } else if (/x\^2/.test(input)) {
+      return solveQuadratic(input);
+    } else if (/x/.test(input) && /=/.test(input)) {
+      return solveLinear(input);
+    } else {
+      return "Hmm 🤔... I couldn't understand that. Try again!";
     }
+  } catch {
+    return "Something went wrong while solving that!";
+  }
+}
 
-    return `The result is: ${result}`;
+function solveArithmetic(expr) {
+  const sanitized = expr.replace(/[^0-9+\-*/().]/g, "");
+  const result = eval(sanitized);
+  return `Answer: ${result}`;
+}
+
+function solveLinear(eq) {
+  const pattern = /([+-]?\d*)x([+-]\d+)?=([+-]?\d*)x?([+-]?\d+)?/;
+  const match = eq.replace(/\s+/g, "").match(pattern);
+  if (!match) return "Can't understand the linear equation.";
+
+  let [_, a, b, d, e] = match;
+  a = parseCoeff(a);
+  b = parseNum(b);
+  d = parseCoeff(d);
+  e = parseNum(e);
+
+  const xCoeff = a - d;
+  const constTerm = e - b;
+
+  if (xCoeff === 0) {
+    return constTerm === 0 ? "∞ solutions (identity)" : "No solution (contradiction)";
   }
 
-  // NLP fallback responses
-  const lower = userMessage.toLowerCase();
-  if (lower.includes("hello")) return "Hello! How can I assist you today?";
-  if (lower.includes("how are you")) return "I'm doing great, thanks for asking!";
-  if (lower.includes("bye")) return "Goodbye! Have a nice day!";
-  if (lower.includes("joke")) return "Why did the math book look sad? Because it had too many problems.";
+  const x = constTerm / xCoeff;
+  return `x = ${x}`;
+}
 
-  // Default fallback
-  return "I didn't quite understand that. Can you try again?";
+function solveQuadratic(eq) {
+  const pattern = /([+-]?\d*)x\^2([+-]?\d*)x([+-]?\d+)=0/;
+  const match = eq.replace(/\s+/g, "").match(pattern);
+  if (!match) return "Can't understand the quadratic.";
+
+  let [_, a, b, c] = match;
+  a = parseCoeff(a);
+  b = parseCoeff(b);
+  c = parseNum(c);
+
+  const d = b * b - 4 * a * c;
+
+  if (d < 0) return "No real roots.";
+  const r1 = (-b + Math.sqrt(d)) / (2 * a);
+  const r2 = (-b - Math.sqrt(d)) / (2 * a);
+  return d === 0 ? `x = ${r1}` : `x₁ = ${r1}, x₂ = ${r2}`;
+}
+
+function parseCoeff(str) {
+  if (!str || str === "+") return 1;
+  if (str === "-") return -1;
+  return parseFloat(str);
+}
+
+function parseNum(str) {
+  return str ? parseFloat(str) : 0;
+}
+
+// Natural language to math
+function convertToMath(text) {
+  let converted = text
+    .toLowerCase()
+    .replace(/plus/g, "+")
+    .replace(/minus/g, "-")
+    .replace(/times|multiplied by/g, "*")
+    .replace(/divided by|over/g, "/")
+    .replace(/equals|is equal to/g, "=")
+    .replace(/what is|solve|calculate|answer/g, "")
+    .replace(/[^0-9x+*/=^.\- ]/g, "");
+
+  return converted.trim();
+}
+
+// Dark mode logic
+function toggleDarkMode() {
+  const dark = document.getElementById("darkModeToggle").checked;
+  document.body.classList.toggle("dark", dark);
+  localStorage.setItem("jerry_theme", dark ? "dark" : "light");
+}
+
+function applyDarkModeFromStorage() {
+  const saved = localStorage.getItem("jerry_theme");
+  if (saved === "dark") {
+    document.body.classList.add("dark");
+    document.getElementById("darkModeToggle").checked = true;
+  }
 }
