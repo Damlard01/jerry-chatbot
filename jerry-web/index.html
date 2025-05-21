@@ -10,6 +10,8 @@
   <div class="container">
     <h1>Jerry Calculation Chatbot</h1>
     <button id="toggle-mode">Toggle Dark Mode</button>
+    <button id="toggle-scientific">Scientific Mode</button>
+
     <div class="display-container">
       <input type="text" id="expression" placeholder="Enter expression or word problem..." />
       <button onclick="handleInput()">=</button>
@@ -21,6 +23,20 @@
       <button onclick="appendToExpression('tan(')">tan</button>
       <button onclick="appendToExpression('sqrt(')">√</button>
       <button onclick="appendToExpression('^2')">x²</button>
+    </div>
+
+    <div class="scientific-buttons hidden" id="scientific-panel">
+      <button onclick="appendToExpression('asin(')">asin</button>
+      <button onclick="appendToExpression('acos(')">acos</button>
+      <button onclick="appendToExpression('atan(')">atan</button>
+      <button onclick="appendToExpression('log(')">log</button>
+      <button onclick="appendToExpression('ln(')">ln</button>
+      <button onclick="appendToExpression('exp(')">e^x</button>
+      <button onclick="appendToExpression('10^')">10^x</button>
+      <button onclick="appendToExpression('Math.PI')">π</button>
+      <button onclick="appendToExpression('Math.E')">e</button>
+      <button onclick="appendToExpression('(')">(</button>
+      <button onclick="appendToExpression(')')">)</button>
     </div>
 
     <div class="calculator-buttons">
