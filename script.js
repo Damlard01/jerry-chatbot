@@ -49,7 +49,7 @@ function downloadChat() {
   const blob = new Blob([content], { type: "text/plain" });
   const link = document.createElement("a");
   link.href = URL.createObjectURL(blob);
-  link.download = "jerry_chat_history.txt";
+  link.download = "Jerry_chat_history.txt";
   link.click();
 }
 
