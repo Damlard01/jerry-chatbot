@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Jerry Calculation Chatbot</title>
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -11,12 +10,10 @@
     <h1>Jerry Calculation Chatbot</h1>
     <button id="toggle-mode">Toggle Dark Mode</button>
     <button id="toggle-scientific">Scientific Mode</button>
-
     <div class="display-container">
       <input type="text" id="expression" placeholder="Enter expression or word problem..." />
       <button onclick="handleInput()">=</button>
     </div>
-
     <div class="function-buttons">
       <button onclick="appendToExpression('sin(')">sin</button>
       <button onclick="appendToExpression('cos(')">cos</button>
@@ -24,7 +21,6 @@
       <button onclick="appendToExpression('sqrt(')">√</button>
       <button onclick="appendToExpression('^2')">x²</button>
     </div>
-
     <div class="scientific-buttons hidden" id="scientific-panel">
       <button onclick="appendToExpression('asin(')">asin</button>
       <button onclick="appendToExpression('acos(')">acos</button>
@@ -38,29 +34,24 @@
       <button onclick="appendToExpression('(')">(</button>
       <button onclick="appendToExpression(')')">)</button>
     </div>
-
     <div class="calculator-buttons">
       <button onclick="appendToExpression('7')">7</button>
       <button onclick="appendToExpression('8')">8</button>
       <button onclick="appendToExpression('9')">9</button>
       <button onclick="appendToExpression('+')">+</button>
-
       <button onclick="appendToExpression('4')">4</button>
       <button onclick="appendToExpression('5')">5</button>
       <button onclick="appendToExpression('6')">6</button>
       <button onclick="appendToExpression('-')">-</button>
-
       <button onclick="appendToExpression('1')">1</button>
       <button onclick="appendToExpression('2')">2</button>
       <button onclick="appendToExpression('3')">3</button>
       <button onclick="appendToExpression('*')">×</button>
-
       <button onclick="appendToExpression('0')">0</button>
       <button onclick="appendToExpression('.')">.</button>
       <button onclick="clearExpression()">C</button>
       <button onclick="appendToExpression('/')">÷</button>
     </div>
-
     <div class="chat-box" id="chat-box"></div>
     <div class="chat-controls">
       <button onclick="clearChat()">Clear Chat</button>
