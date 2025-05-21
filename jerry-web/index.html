@@ -1,19 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Jerry Calculation Chatbot</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
     <h1>Jerry Calculation Chatbot</h1>
     <button id="toggle-mode">Toggle Dark Mode</button>
+
     <div class="display-container">
-      <input type="text" id="expression" placeholder="Enter expression or word problem..." />
+      <input type="text" id="expression" placeholder="Enter expression or word problem...">
       <button onclick="handleInput()">=</button>
     </div>
+
     <div class="calculator-buttons">
       <button onclick="appendToExpression('7')">7</button>
       <button onclick="appendToExpression('8')">8</button>
@@ -35,12 +37,15 @@
       <button onclick="clearExpression()">C</button>
       <button onclick="appendToExpression('/')">÷</button>
     </div>
+
     <div class="chat-box" id="chat-box"></div>
+
     <div class="chat-controls">
       <button onclick="clearChat()">Clear Chat</button>
       <button onclick="downloadChat()">Download Chat</button>
     </div>
   </div>
+
   <script src="script.js"></script>
 </body>
 </html>
