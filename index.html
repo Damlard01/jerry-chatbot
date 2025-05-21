@@ -14,6 +14,15 @@
       <input type="text" id="expression" placeholder="Enter expression or word problem..." />
       <button onclick="handleInput()">=</button>
     </div>
+
+    <div class="function-buttons">
+      <button onclick="appendToExpression('sin(')">sin</button>
+      <button onclick="appendToExpression('cos(')">cos</button>
+      <button onclick="appendToExpression('tan(')">tan</button>
+      <button onclick="appendToExpression('sqrt(')">√</button>
+      <button onclick="appendToExpression('^2')">x²</button>
+    </div>
+
     <div class="calculator-buttons">
       <button onclick="appendToExpression('7')">7</button>
       <button onclick="appendToExpression('8')">8</button>
@@ -35,6 +44,7 @@
       <button onclick="clearExpression()">C</button>
       <button onclick="appendToExpression('/')">÷</button>
     </div>
+
     <div class="chat-box" id="chat-box"></div>
     <div class="chat-controls">
       <button onclick="clearChat()">Clear Chat</button>
