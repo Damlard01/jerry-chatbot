@@ -1,6 +1,8 @@
 const expressionInput = document.getElementById("expression");
 const chatBox = document.getElementById("chat-box");
 const toggleModeBtn = document.getElementById("toggle-mode");
+const toggleSciBtn = document.getElementById("toggle-scientific");
+const sciPanel = document.getElementById("scientific-panel");
 
 function appendToExpression(value) {
   expressionInput.value += value;
@@ -40,8 +42,12 @@ function convertToMath(sentence) {
        .replace(/sqrt\\(([0-9.]+)\\)/g, (_, n) => `Math.sqrt(${n})`)
        .replace(/([0-9.]+)\\^([0-9.]+)/g, (_, base, exp) => `Math.pow(${base},${exp})`)
        .replace(/([0-9.]+)²/g, (_, n) => `Math.pow(${n},2)`)
+       .replace(/log\\(([^)]+)\\)/g, (_, x) => `Math.log10(${x})`)
+       .replace(/ln\\(([^)]+)\\)/g, (_, x) => `Math.log(${x})`)
+       .replace(/e\\^([^)]+)/g, (_, x) => `Math.exp(${x})`)
+       .replace(/10\\^([^)]+)/g, (_, x) => `Math.pow(10,${x})`)
        .replace(/what is|calculate|find|answer to/g, "")
-       .replace(/[^0-9+\\-*/(). Mathsqrtpowsinco tan]/g, "");
+       .replace(/[^0-9+\\-*/(). MathsqrtpowlogexpEPIsinco tan]/g, "");
 
   return s;
 }
@@ -69,4 +75,8 @@ function downloadChat() {
 
 toggleModeBtn.addEventListener("click", () => {
   document.body.classList.toggle("dark-mode");
+});
+
+toggleSciBtn.addEventListener("click", () => {
+  sciPanel.classList.toggle("hidden");
 });
