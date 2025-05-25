@@ -1,0 +1,172 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jerry Calculation Chatbot</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      color: #333;
+      padding: 20px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    .dark-mode {
+      background-color: #1e1e1e;
+      color: #eee;
+    }
+    .container {
+      max-width: 400px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .calculator-buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    .function-buttons, .scientific-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin: 10px 0;
+    }
+    button {
+      padding: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      font-size: 18px;
+    }
+    .chat-box {
+      height: 150px;
+      overflow-y: auto;
+      background: #fff;
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: left;
+      margin-bottom: 10px;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Jerry Calculation Chatbot</h1>
+    <button id="toggle-mode">Toggle Dark Mode</button>
+    <button id="toggle-scientific">Scientific Mode</button>
+    <input type="text" id="expression" placeholder="Enter expression or word problem..." />
+    <button onclick="handleInput()">=</button>
+
+    <div class="function-buttons">
+      <button onclick="appendToExpression('sin(')">sin</button>
+      <button onclick="appendToExpression('cos(')">cos</button>
+      <button onclick="appendToExpression('tan(')">tan</button>
+      <button onclick="appendToExpression('sqrt(')">√</button>
+      <button onclick="appendToExpression('^2')">x²</button>
+    </div>
+
+    <div class="scientific-buttons hidden" id="scientific-panel">
+      <button onclick="appendToExpression('asin(')">asin</button>
+      <button onclick="appendToExpression('acos(')">acos</button>
+      <button onclick="appendToExpression('atan(')">atan</button>
+      <button onclick="appendToExpression('log(')">log</button>
+      <button onclick="appendToExpression('ln(')">ln</button>
+      <button onclick="appendToExpression('exp(')">e^x</button>
+      <button onclick="appendToExpression('10^')">10^x</button>
+      <button onclick="appendToExpression('pi')">π</button>
+      <button onclick="appendToExpression('e')">e</button>
+      <button onclick="appendToExpression('(')">(</button>
+      <button onclick="appendToExpression(')')">)</button>
+    </div>
+
+    <div class="calculator-buttons">
+      <button onclick="appendToExpression('7')">7</button>
+      <button onclick="appendToExpression('8')">8</button>
+      <button onclick="appendToExpression('9')">9</button>
+      <button onclick="appendToExpression('+')">+</button>
+      <button onclick="appendToExpression('4')">4</button>
+      <button onclick="appendToExpression('5')">5</button>
+      <button onclick="appendToExpression('6')">6</button>
+      <button onclick="appendToExpression('-')">-</button>
+      <button onclick="appendToExpression('1')">1</button>
+      <button onclick="appendToExpression('2')">2</button>
+      <button onclick="appendToExpression('3')">3</button>
+      <button onclick="appendToExpression('*')">×</button>
+      <button onclick="appendToExpression('0')">0</button>
+      <button onclick="appendToExpression('.')">.</button>
+      <button onclick="clearExpression()">C</button>
+      <button onclick="appendToExpression('/')">÷</button>
+    </div>
+
+    <div class="chat-box" id="chat-box"></div>
+  </div>
+
+  <script>
+    const expressionInput = document.getElementById("expression");
+    const chatBox = document.getElementById("chat-box");
+    const sciPanel = document.getElementById("scientific-panel");
+    const toggleModeBtn = document.getElementById("toggle-mode");
+    const toggleSciBtn = document.getElementById("toggle-scientific");
+
+    function appendToExpression(value) {
+      expressionInput.value += value;
+    }
+
+    function clearExpression() {
+      expressionInput.value = "";
+    }
+
+    function handleInput() {
+      const input = expressionInput.value.trim();
+      if (!input) return;
+      const expr = convertToMath(input);
+      try {
+        const result = eval(expr);
+        addChatMessage("You: " + input);
+        addChatMessage("Jerry: " + result);
+        expressionInput.value = "";
+      } catch {
+        addChatMessage("Jerry: I couldn't understand that. Try again.");
+      }
+    }
+
+    function convertToMath(expr) {
+      return expr
+        .replace(/sin\(([^)]+)\)/gi, (_, x) => `Math.sin(Math.PI/180*(${x}))`)
+        .replace(/cos\(([^)]+)\)/gi, (_, x) => `Math.cos(Math.PI/180*(${x}))`)
+        .replace(/tan\(([^)]+)\)/gi, (_, x) => `Math.tan(Math.PI/180*(${x}))`)
+        .replace(/asin\(([^)]+)\)/gi, (_, x) => `(180/Math.PI)*Math.asin(${x})`)
+        .replace(/acos\(([^)]+)\)/gi, (_, x) => `(180/Math.PI)*Math.acos(${x})`)
+        .replace(/atan\(([^)]+)\)/gi, (_, x) => `(180/Math.PI)*Math.atan(${x})`)
+        .replace(/sqrt\(([^)]+)\)/gi, (_, x) => `Math.sqrt(${x})`)
+        .replace(/log\(([^)]+)\)/gi, (_, x) => `Math.log10(${x})`)
+        .replace(/ln\(([^)]+)\)/gi, (_, x) => `Math.log(${x})`)
+        .replace(/exp\(([^)]+)\)/gi, (_, x) => `Math.exp(${x})`)
+        .replace(/10\^([^)]+)/gi, (_, x) => `Math.pow(10, ${x})`)
+        .replace(/([0-9.]+)\^2/g, (_, x) => `Math.pow(${x}, 2)`)
+        .replace(/pi/gi, "Math.PI")
+        .replace(/e/g, "Math.E");
+    }
+
+    function addChatMessage(msg) {
+      const div = document.createElement("div");
+      div.textContent = msg;
+      chatBox.appendChild(div);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    toggleModeBtn.onclick = () => document.body.classList.toggle("dark-mode");
+    toggleSciBtn.onclick = () => sciPanel.classList.toggle("hidden");
+  </script>
+</body>
+</html>
