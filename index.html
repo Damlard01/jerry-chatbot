@@ -177,8 +177,13 @@
     const sciPanel = document.getElementById("scientific-panel");
 
     function appendToExpression(value) {
-      expressionInput.value += value;
-    }
+  const autoCloseFunctions = ['sin(', 'cos(', 'tan(', 'asin(', 'acos(', 'atan(', 'sqrt(', 'log(', 'ln(', 'exp('];
+  if (autoCloseFunctions.includes(value)) {
+    value += ')';
+    expressionInput.focus();
+  }
+  expressionInput.value += value;
+}
 
     function clearExpression() {
       expressionInput.value = "";
