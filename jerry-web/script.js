@@ -38,7 +38,7 @@ function handleInput() {
 
 function convertToMath(input) {
   let explanation = "";
-  let s = input.toLowerCase();
+  let s = input.toLowerCase().trim();
 
   // Variable assignment
   if (/([a-z])\s*=\s*([0-9.]+)/.test(s)) {
@@ -65,10 +65,14 @@ function convertToMath(input) {
        .replace(/([0-9.]+)\^3/g, (_, n) => `Math.pow(${n},3)`)
        .replace(/\|([^)]+)\|/g, (_, n) => `Math.abs(${n})`)
        .replace(/square root of ([0-9.]+)/g, (_, n) => `Math.sqrt(${n})`)
+       .replace(/sqrt\(([^)]+)\)/g, (_, n) => `Math.sqrt(${n})`)
        .replace(/log\(([^)]+)\)/g, (_, x) => `Math.log10(${x})`)
        .replace(/ln\(([^)]+)\)/g, (_, x) => `Math.log(${x})`)
        .replace(/e\^([^)]+)/g, (_, x) => `Math.exp(${x})`)
-       .replace(/what is|calculate|find|answer to/g, "");
+       .replace(/10\^([^)]+)/g, (_, x) => `Math.pow(10,${x})`)
+       .replace(/what is|calculate|find|answer to/g, "")
+       .replace(/[^\d+\-*/().%|! a-zA-Z]/g, "") // remove symbols
+       .replace(/\s+/g, ""); // remove spaces
 
   // Explanation
   if (s.includes("Math.pow(")) explanation = "Using power/exponentiation";
