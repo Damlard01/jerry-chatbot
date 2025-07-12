@@ -48,12 +48,10 @@ function convertToMath(input) {
     return { mathExpression: "0", explanation };
   }
 
-  // Replace variables
   for (const v in variables) {
     s = s.replaceAll(new RegExp(`\\b${v}\\b`, 'g'), variables[v]);
   }
 
-  // Natural language replacements
   s = s.replace(/plus/g, "+")
        .replace(/minus/g, "-")
        .replace(/times|multiplied by/g, "*")
@@ -71,10 +69,9 @@ function convertToMath(input) {
        .replace(/e\^([^)]+)/g, (_, x) => `Math.exp(${x})`)
        .replace(/10\^([^)]+)/g, (_, x) => `Math.pow(10,${x})`)
        .replace(/what is|calculate|find|answer to/g, "")
-       .replace(/[^\d+\-*/().%|! a-zA-Z]/g, "") // remove symbols
-       .replace(/\s+/g, ""); // remove spaces
+       .replace(/[^\d+\-*/().%|! a-zA-Z]/g, "")
+       .replace(/\s+/g, "");
 
-  // Explanation
   if (s.includes("Math.pow(")) explanation = "Using power/exponentiation";
   else if (s.includes("Math.sqrt(")) explanation = "Finding the square root";
   else if (s.includes("factorial")) explanation = "Calculating factorial";
