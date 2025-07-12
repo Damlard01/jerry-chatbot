@@ -20,15 +20,18 @@ function handleInput() {
   if (!input) return;
 
   const { mathExpression, explanation } = convertToMath(input);
+
   try {
     const result = eval(mathExpression);
     addChatMessage(`You: ${input}`);
     addChatMessage(`Jerry: ${result}`);
-    if (explanation) addChatMessage(`🤖 Explanation: ${explanation}`);
+    if (explanation) {
+      addChatMessage(`🤖 Explanation: ${explanation}`);
+    }
     expressionInput.value = "";
     expressionInput.classList.remove("error");
   } catch (e) {
-    addChatMessage(`Jerry: I didn't quite understand that. Try again.`);
+    addChatMessage(`Jerry: I couldn't understand or evaluate that.`);
     expressionInput.classList.add("error");
   }
 }
@@ -45,12 +48,12 @@ function convertToMath(input) {
     return { mathExpression: "0", explanation };
   }
 
-  // Replace variable use
+  // Replace variables
   for (const v in variables) {
     s = s.replaceAll(new RegExp(`\\b${v}\\b`, 'g'), variables[v]);
   }
 
-  // Replace natural language with operators/functions
+  // Natural language conversions
   s = s.replace(/plus/g, "+")
        .replace(/minus/g, "-")
        .replace(/times|multiplied by/g, "*")
@@ -66,10 +69,18 @@ function convertToMath(input) {
        .replace(/ln\(([^)]+)\)/g, (_, x) => `Math.log(${x})`)
        .replace(/e\^([^)]+)/g, (_, x) => `Math.exp(${x})`);
 
+  // Simple explanations
+  if (s.includes("Math.pow(")) explanation = "Using exponentiation (power)";
+  else if (s.includes("Math.sqrt(")) explanation = "Calculating square root";
+  else if (s.includes("factorial")) explanation = "Calculating factorial";
+  else if (s.includes("Math.random()")) explanation = "Generating random number";
+  else if (/[a-z]/.test(s)) explanation = "Used stored variables in expression";
+
   return { mathExpression: s, explanation };
 }
 
 function factorial(n) {
+  if (n < 0) return NaN;
   if (n === 0 || n === 1) return 1;
   return n * factorial(n - 1);
 }
