@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Jerry Calculation Chatbot</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="container">
     <h1>Jerry Calculation Chatbot</h1>
-    <div class="toggle-buttons">
-      <button id="toggle-mode" title="Toggle Light/Dark Mode">🌓</button>
-      <button id="toggle-scientific" title="Toggle Scientific Functions">🧪</button>
-    </div>
+    <button id="toggle-mode">Toggle Dark Mode</button>
+    <button id="toggle-scientific">Scientific Mode</button>
+
     <div class="display-container">
-      <input type="text" id="expression" placeholder="Type a math question or problem..." />
+      <input type="text" id="expression" placeholder="Enter expression or word problem..." />
       <button onclick="handleInput()">=</button>
     </div>
 
@@ -23,11 +23,6 @@
       <button onclick="appendToExpression('tan(')">tan</button>
       <button onclick="appendToExpression('sqrt(')">√</button>
       <button onclick="appendToExpression('^2')">x²</button>
-      <button onclick="appendToExpression('^3')">x³</button>
-      <button onclick="appendToExpression('abs(')">|x|</button>
-      <button onclick="appendToExpression('mod')">mod</button>
-      <button onclick="appendToExpression('!')">x!</button>
-      <button onclick="appendToExpression('rand()')">rand</button>
     </div>
 
     <div class="scientific-buttons hidden" id="scientific-panel">
@@ -40,6 +35,13 @@
       <button onclick="appendToExpression('10^')">10^x</button>
       <button onclick="appendToExpression('Math.PI')">π</button>
       <button onclick="appendToExpression('Math.E')">e</button>
+      <button onclick="appendToExpression('!')">x!</button>
+      <button onclick="appendToExpression('%')">mod</button>
+      <button onclick="appendToExpression('^3')">x³</button>
+      <button onclick="appendToExpression('Math.abs(')">|x|</button>
+      <button onclick="appendToExpression('Math.random()')">rand()</button>
+      <button onclick="appendToExpression('(')">(</button>
+      <button onclick="appendToExpression(')')">)</button>
     </div>
 
     <div class="calculator-buttons">
@@ -62,7 +64,6 @@
     </div>
 
     <div class="chat-box" id="chat-box"></div>
-
     <div class="chat-controls">
       <button onclick="clearChat()">Clear Chat</button>
       <button onclick="downloadChat()">Download Chat</button>
